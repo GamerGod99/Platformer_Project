@@ -12,9 +12,8 @@ class Game:
         pygame.init()
 
         pygame.display.set_caption('Platformer')
-
-        self.screen = pygame.display.set_mode((1280, 720))  # Window surface
-        self.display = pygame.Surface((320, 180))  # Render surface, scaled down 2x (for 4x: 320, 180)
+        self.screen = pygame.display.set_mode((640, 480))  # Window surface
+        self.display = pygame.Surface((320, 240))  # Render surface, scaled down 2x (for 4x: 320, 180)
 
         self.clock = pygame.time.Clock()
 
@@ -29,18 +28,20 @@ class Game:
             'player': load_image('entities/player.png')
         }
 
-        self.player = PhysicsEntity(self, 'player', (100, 100), (6, 16))
+        self.player = PhysicsEntity(self, 'player', (50, 50), (8, 15))
 
         self.tilemap = Tilemap(self, tile_size=16)
 
     def run(self):
         while True:
-            self.display.fill((14, 180, 245))
+            self.display.fill((14, 219, 248))
 
             self.tilemap.render(self.display)
 
-            self.player.update((self.movement[1] - self.movement[0], 0))
+            self.player.update(self.tilemap, (self.movement[1] - self.movement[0], 0))
             self.player.render(self.display)
+
+            print(self.tilemap.physics_rects_around(self.player.pos))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
